@@ -1,0 +1,8 @@
+{
+  "deckCount": 1,
+  "maxCardsPerPlay": 4,
+  "whoStartsAfterChallenge": "winner",
+  "mustSurviveCallOnLastPlay": true,
+  "allowPass": false,
+  "rankProgression": "tableClearOnAllPass"
+}

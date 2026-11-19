@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@cards/engine": ["../engine/src/index.ts"],
+      "@cards/engine/*": ["../engine/src/*"]
+    }
+  },
+  "include": ["src/**/*"]
+}

@@ -1,0 +1,426 @@
+:root {
+  --bg-main: #0a0e14;
+  --bg-card: rgba(22, 28, 36, 0.75);
+  --felt-base: #0f3d2e;
+  --felt-deep: #08261c;
+  --felt-border: #3b2818;
+  --felt-gold: #d4af37;
+  --felt-gold-glow: rgba(212, 175, 55, 0.4);
+  --accent-gold: #f5c542;
+  --accent-crimson: #e63946;
+  --accent-blue: #3a86ff;
+  --text-main: #f0f4f8;
+  --text-muted: #94a3b8;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+  --shadow-felt: inset 0 0 100px rgba(0, 0, 0, 0.8), 0 20px 40px rgba(0, 0, 0, 0.6);
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.45);
+  --shadow-gold: 0 0 20px rgba(245, 197, 66, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image: radial-gradient(circle at 50% 20%, #16202c 0%, #080c10 100%);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+  background: rgba(18, 24, 34, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+}
+
+/* Keyframe animations */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(245, 197, 66, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(245, 197, 66, 0.7);
+  }
+}
+
+@keyframes challengePulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 15px rgba(230, 57, 70, 0.4);
+  }
+  50% {
+    transform: scale(1.04);
+    box-shadow: 0 0 30px rgba(230, 57, 70, 0.8);
+  }
+}
+
+@keyframes dealCard {
+  from {
+    transform: translateY(-50px) scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes dealFlyTop {
+  0% {
+    transform: translateY(-160px) scale(0.4) rotate(-15deg);
+    opacity: 0;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes dealFlyLeft {
+  0% {
+    transform: translateX(-160px) scale(0.4) rotate(20deg);
+    opacity: 0;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes dealFlyRight {
+  0% {
+    transform: translateX(160px) scale(0.4) rotate(-20deg);
+    opacity: 0;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes dealFlyBottom {
+  0% {
+    transform: translateY(120px) scale(0.4) rotate(0deg);
+    opacity: 0;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes typingDot {
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+  40% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+@keyframes thullaShake {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  10% { transform: translate(-9px, -6px) rotate(-1.5deg); }
+  20% { transform: translate(9px, 6px) rotate(1.5deg); }
+  30% { transform: translate(-12px, 5px) rotate(-2deg); }
+  40% { transform: translate(12px, -5px) rotate(2deg); }
+  50% { transform: translate(-7px, 9px) rotate(-1deg); }
+  60% { transform: translate(7px, -7px) rotate(1deg); }
+  70% { transform: translate(-4px, 4px) rotate(-0.5deg); }
+  80% { transform: translate(4px, -4px) rotate(0.5deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@keyframes thullaShockwave {
+  0% {
+    transform: scale(0.5);
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.95), inset 0 0 60px rgba(239, 68, 68, 0.85);
+  }
+  50% {
+    opacity: 0.9;
+    box-shadow: 0 0 100px 50px rgba(239, 68, 68, 0.7), inset 0 0 120px rgba(239, 68, 68, 0.6);
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+    box-shadow: 0 0 150px 90px rgba(239, 68, 68, 0), inset 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+@keyframes comicPop {
+  0% { transform: scale(0.2) rotate(-15deg); opacity: 0; }
+  40% { transform: scale(1.3) rotate(5deg); opacity: 1; }
+  60% { transform: scale(0.95) rotate(-3deg); }
+  80% { transform: scale(1.05) rotate(1deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes cardDropIn {
+  from {
+    transform: translateY(-40px) scale(0.6) rotate(-10deg);
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes burnCardsOut {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 10px #f59e0b);
+  }
+  50% {
+    transform: scale(1.15) rotate(8deg);
+    opacity: 0.8;
+    filter: drop-shadow(0 0 40px #ef4444) brightness(1.6);
+  }
+  100% {
+    transform: scale(0.15) translateY(-70px) rotate(35deg);
+    opacity: 0;
+    filter: brightness(2.2);
+  }
+}
+
+@keyframes pickupCardsOut {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.25) translateY(90px);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Card Throw Animations (flying from player seat into table center) */
+@keyframes throwFromBottom {
+  0% {
+    transform: translate(-50%, 140px) scale(0.5) rotate(-12deg);
+    opacity: 0;
+  }
+  65% {
+    transform: translate(-50%, -15px) scale(1.15) rotate(3deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes throwFromTop {
+  0% {
+    transform: translate(-50%, -140px) scale(0.5) rotate(12deg);
+    opacity: 0;
+  }
+  65% {
+    transform: translate(-50%, 15px) scale(1.15) rotate(-3deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes throwFromLeft {
+  0% {
+    transform: translate(-200px, -50%) scale(0.5) rotate(-18deg);
+    opacity: 0;
+  }
+  65% {
+    transform: translate(15px, -50%) scale(1.15) rotate(4deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(0, -50%) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes throwFromRight {
+  0% {
+    transform: translate(200px, -50%) scale(0.5) rotate(18deg);
+    opacity: 0;
+  }
+  65% {
+    transform: translate(-15px, -50%) scale(1.15) rotate(-4deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(0, -50%) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* Card Eating & Vanishing Animations (cards fly toward the player who ate them and vanish) */
+@keyframes eatVanishToBottom {
+  0% {
+    transform: translate(-50%, 0) scale(1) rotate(0deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 25px #facc15);
+  }
+  35% {
+    transform: translate(-50%, -12px) scale(1.15) rotate(4deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 35px #10b981) brightness(1.25);
+  }
+  100% {
+    transform: translate(-50%, 180px) scale(0.2) rotate(-16deg);
+    opacity: 0;
+    filter: brightness(2);
+  }
+}
+
+@keyframes eatVanishToTop {
+  0% {
+    transform: translate(-50%, 0) scale(1) rotate(0deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 25px #facc15);
+  }
+  35% {
+    transform: translate(-50%, 12px) scale(1.15) rotate(-4deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 35px #10b981) brightness(1.25);
+  }
+  100% {
+    transform: translate(-50%, -180px) scale(0.2) rotate(16deg);
+    opacity: 0;
+    filter: brightness(2);
+  }
+}
+
+@keyframes eatVanishToLeft {
+  0% {
+    transform: translate(0, -50%) scale(1) rotate(0deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 25px #facc15);
+  }
+  35% {
+    transform: translate(12px, -50%) scale(1.15) rotate(-4deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 35px #10b981) brightness(1.25);
+  }
+  100% {
+    transform: translate(-230px, -50%) scale(0.2) rotate(-20deg);
+    opacity: 0;
+    filter: brightness(2);
+  }
+}
+
+@keyframes eatVanishToRight {
+  0% {
+    transform: translate(0, -50%) scale(1) rotate(0deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 25px #facc15);
+  }
+  35% {
+    transform: translate(-12px, -50%) scale(1.15) rotate(4deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 35px #10b981) brightness(1.25);
+  }
+  100% {
+    transform: translate(230px, -50%) scale(0.2) rotate(20deg);
+    opacity: 0;
+    filter: brightness(2);
+  }
+}
+
+@keyframes eatingClusterGlow {
+  0%, 100% {
+    box-shadow: 0 0 25px rgba(250, 204, 21, 0.7), 0 0 50px rgba(16, 185, 129, 0.4);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 45px rgba(250, 204, 21, 0.95), 0 0 80px rgba(16, 185, 129, 0.7);
+    transform: scale(1.05);
+  }
+}
+
+@keyframes cardVanishFade {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 20px #f59e0b);
+  }
+  40% {
+    transform: scale(1.15) rotate(5deg);
+    opacity: 0.95;
+    filter: drop-shadow(0 0 35px #ef4444) brightness(1.4);
+  }
+  100% {
+    transform: scale(0.15) translateY(-50px) rotate(25deg);
+    opacity: 0;
+    filter: brightness(2);
+  }
+}
