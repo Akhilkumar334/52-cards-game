@@ -179,6 +179,7 @@ export const ThullaTable: React.FC<ThullaTableProps> = ({
     >
       {/* 1. CASINO FELT ARENA (Opponents & Center Trick) */}
       <div
+        className="felt-arena-responsive"
         style={{
           position: 'relative',
           width: '100%',

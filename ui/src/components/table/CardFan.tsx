@@ -188,6 +188,7 @@ export const CardFan: React.FC<CardFanProps> = ({
       ) : (
         /* Fan View — Curved casino arc with smart hover peek */
         <div
+          className="card-fan-responsive"
           style={{
             display: 'flex',
             justifyContent: 'center',

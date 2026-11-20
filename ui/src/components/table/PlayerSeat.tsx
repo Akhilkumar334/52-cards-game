@@ -66,6 +66,7 @@ export const PlayerSeat: React.FC<PlayerSeatProps> = ({
     >
       {/* Avatar Container */}
       <div
+        className="player-seat-avatar"
         style={{
           position: 'relative',
           width: 58,
@@ -131,7 +132,7 @@ export const PlayerSeat: React.FC<PlayerSeatProps> = ({
           </div>
         )}
 
-        <span style={{ fontSize: '1.4rem' }}>
+        <span className="avatar-emoji" style={{ fontSize: '1.4rem' }}>
           {isWinner ? '👑' : isHuman ? '🤠' : '🤖'}
         </span>
 
@@ -167,6 +168,7 @@ export const PlayerSeat: React.FC<PlayerSeatProps> = ({
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
           <span
+            className="player-seat-name"
             style={{
               fontSize: '0.85rem',
               fontWeight: 600,

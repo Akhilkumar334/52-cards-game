@@ -143,6 +143,7 @@ export const BluffPage: React.FC = () => {
   });
 
   const [isProcessingBot, setIsProcessingBot] = useState(false);
+  const [showMobileLog, setShowMobileLog] = useState(false);
   const [botThinkingText, setBotThinkingText] = useState<string | null>(null);
   const [botThinkingPlayerName, setBotThinkingPlayerName] = useState<string | null>(null);
   const [isDealingAnimation, setIsDealingAnimation] = useState(true);
@@ -606,6 +607,31 @@ export const BluffPage: React.FC = () => {
             ⚙️ Ruleset Config
           </button>
           <button
+            type="button"
+            className="mobile-log-toggle-btn"
+            onClick={() => setShowMobileLog(!showMobileLog)}
+            style={{
+              background: showMobileLog ? '#3b82f6' : 'rgba(255, 255, 255, 0.08)',
+              color: '#fff',
+              padding: '5px 10px',
+              borderRadius: 8,
+              fontSize: '0.78rem',
+              fontWeight: 600,
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 5,
+              cursor: 'pointer',
+            }}
+          >
+            <span>💬</span>
+            <span>Log</span>
+            <span style={{ background: 'rgba(0,0,0,0.3)', borderRadius: 10, padding: '1px 5px', fontSize: '0.7rem' }}>
+              {gameState.log.length}
+            </span>
+          </button>
+
+          <button
             onClick={() => {
               if (isRoomMode) {
                 if (localPlayer?.isHost) {
@@ -734,16 +760,50 @@ export const BluffPage: React.FC = () => {
           />
         </div>
 
-        {/* Live Metrics & Chat / Event Log Sidebar */}
-        <ScorePanel
-          currentRank={gameState.currentRank}
-          pileCount={gameState.pile.length}
-          turnNumber={gameState.turnNumber}
-          log={gameState.log}
-          botThinkingText={botThinkingText}
-          botThinkingPlayerName={botThinkingPlayerName}
-        />
+        {/* Live Metrics & Chat / Event Log Sidebar (Desktop) */}
+        <div className="desktop-sidebar-only">
+          <ScorePanel
+            currentRank={gameState.currentRank}
+            pileCount={gameState.pile.length}
+            turnNumber={gameState.turnNumber}
+            log={gameState.log}
+            botThinkingText={botThinkingText}
+            botThinkingPlayerName={botThinkingPlayerName}
+          />
+        </div>
       </div>
+
+      {/* Mobile Slide-over Drawer for Sidebar */}
+      {showMobileLog && (
+        <div className="mobile-sidebar-drawer" onClick={() => setShowMobileLog(false)}>
+          <div className="mobile-sidebar-drawer-content" onClick={(e) => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+              <span style={{ fontWeight: 700, color: '#facc15' }}>💬 Game Log & Chat</span>
+              <button
+                onClick={() => setShowMobileLog(false)}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: 6,
+                  padding: '4px 8px',
+                  cursor: 'pointer',
+                }}
+              >
+                ✕
+              </button>
+            </div>
+            <ScorePanel
+              currentRank={gameState.currentRank}
+              pileCount={gameState.pile.length}
+              turnNumber={gameState.turnNumber}
+              log={gameState.log}
+              botThinkingText={botThinkingText}
+              botThinkingPlayerName={botThinkingPlayerName}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Ruleset Configuration Modal */}
       {showRulesetModal && (

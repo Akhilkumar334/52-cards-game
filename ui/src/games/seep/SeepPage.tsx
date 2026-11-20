@@ -147,6 +147,7 @@ export const SeepPage: React.FC = () => {
   const [botThinkingPlayerName, setBotThinkingPlayerName] = useState<string | null>(null);
   const [isDealingAnimation, setIsDealingAnimation] = useState(true);
   const [showRulesetModal, setShowRulesetModal] = useState(false);
+  const [showMobileLog, setShowMobileLog] = useState(false);
   const [seepCelebrationActive, setSeepCelebrationActive] = useState(false);
   const [playerActionBubbles, setPlayerActionBubbles] = useState<
     Record<string, { text: string; type: 'think' | 'play' | 'pass' | 'challenge' | 'thulla' }>
@@ -603,6 +604,31 @@ const SPEED_CONFIG = {
           </button>
 
           <button
+            type="button"
+            className="mobile-log-toggle-btn"
+            onClick={() => setShowMobileLog(!showMobileLog)}
+            style={{
+              background: showMobileLog ? '#10b981' : 'rgba(255, 255, 255, 0.08)',
+              color: '#fff',
+              padding: '5px 10px',
+              borderRadius: 8,
+              fontSize: '0.78rem',
+              fontWeight: 600,
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 5,
+              cursor: 'pointer',
+            }}
+          >
+            <span>💬</span>
+            <span>Log</span>
+            <span style={{ background: 'rgba(0,0,0,0.3)', borderRadius: 10, padding: '1px 5px', fontSize: '0.7rem' }}>
+              {gameState.log.length}
+            </span>
+          </button>
+
+          <button
             onClick={() => setShowRulesetModal(true)}
             style={{
               background: 'rgba(255, 255, 255, 0.08)',
@@ -716,17 +742,52 @@ const SPEED_CONFIG = {
           />
         </div>
 
-        {/* Sidebar */}
-        <SeepSidebar
-          teams={gameState.teams}
-          targetScore={gameState.ruleset.targetScore}
-          looseCount={gameState.floor.looseCards.length}
-          houseCount={gameState.floor.houses.length}
-          log={gameState.log}
-          botThinkingText={botThinkingText}
-          botThinkingPlayerName={botThinkingPlayerName}
-        />
+        {/* Sidebar (Desktop) */}
+        <div className="desktop-sidebar-only">
+          <SeepSidebar
+            teams={gameState.teams}
+            targetScore={gameState.ruleset.targetScore}
+            looseCount={gameState.floor.looseCards.length}
+            houseCount={gameState.floor.houses.length}
+            log={gameState.log}
+            botThinkingText={botThinkingText}
+            botThinkingPlayerName={botThinkingPlayerName}
+          />
+        </div>
       </div>
+
+      {/* Mobile Slide-over Drawer for Sidebar */}
+      {showMobileLog && (
+        <div className="mobile-sidebar-drawer" onClick={() => setShowMobileLog(false)}>
+          <div className="mobile-sidebar-drawer-content" onClick={(e) => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+              <span style={{ fontWeight: 700, color: '#10b981' }}>💬 100-Pt Score & Log</span>
+              <button
+                onClick={() => setShowMobileLog(false)}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: 6,
+                  padding: '4px 8px',
+                  cursor: 'pointer',
+                }}
+              >
+                ✕
+              </button>
+            </div>
+            <SeepSidebar
+              teams={gameState.teams}
+              targetScore={gameState.ruleset.targetScore}
+              looseCount={gameState.floor.looseCards.length}
+              houseCount={gameState.floor.houses.length}
+              log={gameState.log}
+              botThinkingText={botThinkingText}
+              botThinkingPlayerName={botThinkingPlayerName}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Round Over Modal */}
       {gameState.phase.type === 'round_over' && (

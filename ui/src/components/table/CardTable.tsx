@@ -42,6 +42,7 @@ export const CardTable: React.FC<CardTableProps> = ({
     >
       {/* 1. TOP FELT ARENA (Opponents & Center Pile) */}
       <div
+        className="felt-arena-responsive"
         style={{
           position: 'relative',
           width: '100%',

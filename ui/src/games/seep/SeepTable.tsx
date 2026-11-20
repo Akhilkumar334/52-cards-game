@@ -262,6 +262,7 @@ export const SeepTable: React.FC<SeepTableProps> = ({
 
       {/* 1. CASINO FELT ARENA (STREAMLINED 295PX HEIGHT SO PLAYER HAND IS ALWAYS 100% VISIBLE) */}
       <div
+        className="felt-arena-responsive"
         style={{
           position: 'relative',
           width: '100%',

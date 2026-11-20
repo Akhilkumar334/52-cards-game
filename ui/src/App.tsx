@@ -7,6 +7,8 @@ import { RoomLobby } from './components/room/RoomLobby';
 import { LandingPage } from './pages/LandingPage';
 import { useRoomStore } from './network/useRoomStore';
 import type { GameType } from './network/types';
+import { useDeviceOrientation } from './hooks/useDeviceOrientation';
+import { LandscapePrompt } from './components/mobile/LandscapePrompt';
 
 export const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<'home' | 'game'>('home');
@@ -18,6 +20,7 @@ export const App: React.FC = () => {
   const [initialRoomCode, setInitialRoomCode] = useState('');
 
   const { room, leaveRoom } = useRoomStore();
+  const orientation = useDeviceOrientation();
 
   // Detect ?room=CODE in URL query params on load (e.g. from shared invite links)
   useEffect(() => {
@@ -106,9 +109,16 @@ export const App: React.FC = () => {
   };
 
   const isLobbyActive = playMode === 'room' && room && room.status === 'lobby';
+  const isMobileGameView = orientation.isMobile && currentView === 'game';
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div
+      className={orientation.forceLandscape && orientation.isPortrait ? 'force-landscape-container' : ''}
+      style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}
+    >
+      {/* Mobile Landscape Guidance Modal */}
+      <LandscapePrompt orientation={orientation} />
+
       {/* Platform Navigation Header */}
       <header
         style={{
@@ -118,28 +128,29 @@ export const App: React.FC = () => {
           position: 'sticky',
           top: 0,
           zIndex: 50,
-          padding: '0 16px',
+          padding: '0 max(12px, env(safe-area-inset-left))',
         }}
       >
         <div
           style={{
             maxWidth: 1440,
             margin: '0 auto',
-            height: 48,
+            height: isMobileGameView ? 38 : 48,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
+            gap: 8,
           }}
         >
           {/* Brand & Home Navigation */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <button
               onClick={() => setCurrentView('home')}
               title="Return to Home / Game Selector"
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 8,
+                gap: 6,
                 background: 'transparent',
                 border: 'none',
                 cursor: 'pointer',
@@ -148,18 +159,20 @@ export const App: React.FC = () => {
               }}
             >
               <span style={{ fontSize: '1.25rem', color: '#facc15' }}>♠</span>
-              <h1
-                style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: '1.15rem',
-                  fontWeight: 700,
-                  color: '#f8fafc',
-                  letterSpacing: '0.04em',
-                  margin: 0,
-                }}
-              >
-                52 CARDS PLATFORM
-              </h1>
+              {!isMobileGameView && (
+                <h1
+                  style={{
+                    fontFamily: 'var(--font-serif)',
+                    fontSize: '1.15rem',
+                    fontWeight: 700,
+                    color: '#f8fafc',
+                    letterSpacing: '0.04em',
+                    margin: 0,
+                  }}
+                >
+                  52 CARDS PLATFORM
+                </h1>
+              )}
             </button>
 
             {currentView === 'game' && (
@@ -169,9 +182,9 @@ export const App: React.FC = () => {
                   background: 'rgba(255, 255, 255, 0.06)',
                   color: '#cbd5e1',
                   border: '1px solid rgba(255, 255, 255, 0.1)',
-                  padding: '4px 10px',
+                  padding: '3px 8px',
                   borderRadius: 6,
-                  fontSize: '0.78rem',
+                  fontSize: '0.76rem',
                   fontWeight: 600,
                   display: 'flex',
                   alignItems: 'center',
@@ -180,13 +193,31 @@ export const App: React.FC = () => {
                 }}
               >
                 <span>←</span>
-                <span>All Games</span>
+                <span>{isMobileGameView ? 'Home' : 'All Games'}</span>
               </button>
+            )}
+
+            {isMobileGameView && (
+              <span
+                style={{
+                  color:
+                    activeTab === 'bluff'
+                      ? '#f59e0b'
+                      : activeTab === 'thulla'
+                        ? '#38bdf8'
+                        : '#10b981',
+                  fontWeight: 700,
+                  fontSize: '0.85rem',
+                  marginLeft: 4,
+                }}
+              >
+                {activeTab === 'bluff' ? '🃏 Bluff' : activeTab === 'thulla' ? '⚡ Thulla' : '🏰 Seep'}
+              </span>
             )}
           </div>
 
-          {/* Center Navigation Controls (When inside a game) */}
-          {currentView === 'game' ? (
+          {/* Center Navigation Controls (Desktop only in game view) */}
+          {!isMobileGameView && currentView === 'game' && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               {/* Mode Switcher: Play with Bots vs Create/Join Room */}
               <div
@@ -321,9 +352,42 @@ export const App: React.FC = () => {
                 </button>
               </div>
             </div>
-          ) : (
-            /* Home View Header Actions */
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          )}
+
+          {/* Right Header Actions */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            {/* Mobile Orientation Toggle */}
+            {orientation.isMobile && (
+              <button
+                type="button"
+                onClick={() => {
+                  if (orientation.isPortrait) {
+                    orientation.toggleForceLandscape();
+                  } else {
+                    orientation.requestLandscapeFullscreen();
+                  }
+                }}
+                title="Toggle Landscape / Sideways Mode"
+                style={{
+                  background: orientation.forceLandscape ? '#f59e0b' : 'rgba(255, 255, 255, 0.08)',
+                  color: orientation.forceLandscape ? '#000' : '#e2e8f0',
+                  padding: '4px 8px',
+                  borderRadius: 6,
+                  fontSize: '0.76rem',
+                  fontWeight: 700,
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 4,
+                }}
+              >
+                <span>📱</span>
+                <span>{orientation.forceLandscape ? 'Sideways ON' : 'Rotate'}</span>
+              </button>
+            )}
+
+            {currentView === 'home' && (
               <button
                 onClick={() => {
                   setInitialRoomCode('');
@@ -345,29 +409,37 @@ export const App: React.FC = () => {
               >
                 <span>🌐 Create / Join Room</span>
               </button>
-            </div>
-          )}
+            )}
 
-          {/* Help Button */}
-          <button
-            onClick={() => handleOpenHowToPlay(activeTab)}
-            style={{
-              background: 'rgba(255, 255, 255, 0.08)',
-              color: '#e2e8f0',
-              padding: '6px 14px',
-              borderRadius: 8,
-              fontSize: '0.85rem',
-              fontWeight: 600,
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-            }}
-          >
-            📖 How to Play
-          </button>
+            {/* Help Button */}
+            <button
+              onClick={() => handleOpenHowToPlay(activeTab)}
+              style={{
+                background: 'rgba(255, 255, 255, 0.08)',
+                color: '#e2e8f0',
+                padding: isMobileGameView ? '4px 8px' : '6px 14px',
+                borderRadius: 8,
+                fontSize: isMobileGameView ? '0.76rem' : '0.85rem',
+                fontWeight: 600,
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+              }}
+            >
+              {isMobileGameView ? '📖 Rules' : '📖 How to Play'}
+            </button>
+          </div>
         </div>
       </header>
 
       {/* Main Content Area */}
-      <main style={{ flex: 1, padding: isLobbyActive || currentView === 'home' ? '0' : '20px 0' }}>
+      <main
+        style={{
+          flex: 1,
+          padding:
+            isMobileGameView || isLobbyActive || currentView === 'home' || orientation.isShortScreen
+              ? '0'
+              : '20px 0',
+        }}
+      >
         {currentView === 'home' ? (
           <LandingPage onSelectGame={handleSelectGame} onOpenHowToPlay={handleOpenHowToPlay} />
         ) : isLobbyActive ? (
@@ -383,18 +455,20 @@ export const App: React.FC = () => {
         )}
       </main>
 
-      {/* Footer */}
-      <footer
-        style={{
-          borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-          padding: '14px 24px',
-          color: '#64748b',
-          fontSize: '0.75rem',
-          textAlign: 'center',
-        }}
-      >
-        Pure TypeScript Engine • Real-time Multiplayer (BroadcastChannel & WebSocket) • Seeded Mulberry32 RNG
-      </footer>
+      {/* Footer (Hide on mobile in-game to allow full table view) */}
+      {!isMobileGameView && (
+        <footer
+          style={{
+            borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+            padding: '14px 24px',
+            color: '#64748b',
+            fontSize: '0.75rem',
+            textAlign: 'center',
+          }}
+        >
+          Pure TypeScript Engine • Real-time Multiplayer (BroadcastChannel & WebSocket) • Seeded Mulberry32 RNG
+        </footer>
+      )}
 
       {/* Multiplayer Room Modal (Create / Join Room) */}
       <RoomModal

@@ -424,3 +424,124 @@ button:disabled {
     filter: brightness(2);
   }
 }
+
+/* Phone 3D Rotating Animation */
+@keyframes phoneRotate3D {
+  0%, 15% {
+    transform: rotate(0deg);
+  }
+  45%, 75% {
+    transform: rotate(-90deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Virtual Force Landscape for Mobile Phones in Portrait */
+@media (orientation: portrait) {
+  body.force-landscape-active {
+    overflow: hidden !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    position: fixed !important;
+  }
+
+  .force-landscape-container {
+    position: fixed !important;
+    top: 0 !important;
+    left: 100% !important;
+    width: 100vh !important;
+    height: 100vw !important;
+    transform: rotate(90deg) !important;
+    transform-origin: top left !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    background-color: var(--bg-main) !important;
+  }
+}
+
+/* Safe area insets support for iPhone notches & home indicators */
+.safe-padding {
+  padding-left: max(8px, env(safe-area-inset-left));
+  padding-right: max(8px, env(safe-area-inset-right));
+  padding-bottom: max(6px, env(safe-area-inset-bottom));
+}
+
+/* Mobile landscape adjustments (screen height <= 520px) */
+@media (max-height: 520px), (max-width: 768px) {
+  .felt-arena-responsive {
+    height: 220px !important;
+    border-radius: 110px !important;
+    padding: 4px 14px !important;
+  }
+  .card-fan-responsive {
+    height: 85px !important;
+  }
+  .player-seat-avatar {
+    width: 42px !important;
+    height: 42px !important;
+  }
+  .player-seat-avatar span.avatar-emoji {
+    font-size: 1.1rem !important;
+  }
+  .player-seat-name {
+    font-size: 0.72rem !important;
+    max-width: 70px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* Sidebar drawer for mobile landscape & small screens */
+@media (max-width: 960px), (max-height: 520px) {
+  .desktop-sidebar-only {
+    display: none !important;
+  }
+}
+
+@media (min-width: 961px) and (min-height: 521px) {
+  .mobile-log-toggle-btn {
+    display: none !important;
+  }
+  .mobile-sidebar-drawer {
+    display: none !important;
+  }
+}
+
+.mobile-sidebar-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: flex-end;
+  animation: fadeInUp 0.2s ease-out;
+}
+
+.mobile-sidebar-drawer-content {
+  width: 290px;
+  max-width: 85vw;
+  height: 100%;
+  background: #0a0e14;
+  box-shadow: -6px 0 30px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  overflow-y: auto;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+

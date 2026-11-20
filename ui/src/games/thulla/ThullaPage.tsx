@@ -141,6 +141,7 @@ export const ThullaPage: React.FC = () => {
   const [botThinkingPlayerName, setBotThinkingPlayerName] = useState<string | null>(null);
   const [isDealingAnimation, setIsDealingAnimation] = useState(true);
   const [showRulesetModal, setShowRulesetModal] = useState(false);
+  const [showMobileLog, setShowMobileLog] = useState(false);
 
   // Crazy Thulla animation state and Trick resolution preservation
   const [resolvingTrick, setResolvingTrick] = useState<ResolvingTrick | null>(null);
@@ -568,6 +569,31 @@ export const ThullaPage: React.FC = () => {
 
         <div style={{ display: 'flex', gap: 8 }}>
           <button
+            type="button"
+            className="mobile-log-toggle-btn"
+            onClick={() => setShowMobileLog(!showMobileLog)}
+            style={{
+              background: showMobileLog ? '#0284c7' : 'rgba(255, 255, 255, 0.08)',
+              color: '#fff',
+              padding: '5px 10px',
+              borderRadius: 8,
+              fontSize: '0.78rem',
+              fontWeight: 600,
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 5,
+              cursor: 'pointer',
+            }}
+          >
+            <span>💬</span>
+            <span>Log</span>
+            <span style={{ background: 'rgba(0,0,0,0.3)', borderRadius: 10, padding: '1px 5px', fontSize: '0.7rem' }}>
+              {gameState.log.length}
+            </span>
+          </button>
+
+          <button
             onClick={() => setShowRulesetModal(true)}
             style={{
               background: 'rgba(255, 255, 255, 0.08)',
@@ -736,18 +762,54 @@ export const ThullaPage: React.FC = () => {
           />
         </div>
 
-        {/* Live Broadcast & Status Sidebar */}
-        <ThullaSidebar
-          ledSuit={gameState.currentTrick?.ledSuit ?? null}
-          trickNumber={gameState.trickNumber}
-          burnedCount={gameState.discardPile.length}
-          activePlayerCount={activePlayers.length}
-          escapedPlayers={escapedPlayers}
-          log={gameState.log}
-          botThinkingText={botThinkingText}
-          botThinkingPlayerName={botThinkingPlayerName}
-        />
+        {/* Live Broadcast & Status Sidebar (Desktop) */}
+        <div className="desktop-sidebar-only">
+          <ThullaSidebar
+            ledSuit={gameState.currentTrick?.ledSuit ?? null}
+            trickNumber={gameState.trickNumber}
+            burnedCount={gameState.discardPile.length}
+            activePlayerCount={activePlayers.length}
+            escapedPlayers={escapedPlayers}
+            log={gameState.log}
+            botThinkingText={botThinkingText}
+            botThinkingPlayerName={botThinkingPlayerName}
+          />
+        </div>
       </div>
+
+      {/* Mobile Slide-over Drawer for Sidebar */}
+      {showMobileLog && (
+        <div className="mobile-sidebar-drawer" onClick={() => setShowMobileLog(false)}>
+          <div className="mobile-sidebar-drawer-content" onClick={(e) => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+              <span style={{ fontWeight: 700, color: '#38bdf8' }}>💬 Trick Log & Status</span>
+              <button
+                onClick={() => setShowMobileLog(false)}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: 6,
+                  padding: '4px 8px',
+                  cursor: 'pointer',
+                }}
+              >
+                ✕
+              </button>
+            </div>
+            <ThullaSidebar
+              ledSuit={gameState.currentTrick?.ledSuit ?? null}
+              trickNumber={gameState.trickNumber}
+              burnedCount={gameState.discardPile.length}
+              activePlayerCount={activePlayers.length}
+              escapedPlayers={escapedPlayers}
+              log={gameState.log}
+              botThinkingText={botThinkingText}
+              botThinkingPlayerName={botThinkingPlayerName}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Game Over Announcement Modal */}
       {isGameOver && bhabhiPlayer && (
