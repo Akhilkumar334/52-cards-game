@@ -199,6 +199,7 @@ export const CardTable: React.FC<CardTableProps> = ({
 
             {/* Pile of Cards */}
             <div
+              className="table-center-pile"
               style={{
                 position: 'relative',
                 width: 60,

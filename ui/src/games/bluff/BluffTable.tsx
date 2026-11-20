@@ -279,7 +279,7 @@ export const BluffTable: React.FC<BluffTableProps> = ({
 
       return (
         <div
-          className="glass-panel"
+          className="glass-panel game-action-bar-compact"
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -297,7 +297,7 @@ export const BluffTable: React.FC<BluffTableProps> = ({
           }}
         >
           {/* Header guidance */}
-          <div style={{ textAlign: 'center' }}>
+          <div className="instruction-text" style={{ textAlign: 'center' }}>
             {gameState.lastPlayedPlayerIndex === humanIndex && !gameState.canLeadRank ? (
               <>
                 <div
@@ -562,6 +562,7 @@ export const BluffTable: React.FC<BluffTableProps> = ({
         activeThrowAction={activeThrowAction}
         bottomSeat={
           <div
+            className="bottom-console-wrapper"
             style={{
               background: 'rgba(15, 23, 42, 0.88)',
               backdropFilter: 'blur(16px)',
@@ -582,6 +583,7 @@ export const BluffTable: React.FC<BluffTableProps> = ({
           >
             {/* Header row: Left has Player Identity; Right has Status */}
             <div
+              className="bottom-console-header"
               style={{
                 display: 'flex',
                 alignItems: 'center',

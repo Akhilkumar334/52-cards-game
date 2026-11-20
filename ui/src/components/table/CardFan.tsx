@@ -77,16 +77,21 @@ export const CardFan: React.FC<CardFanProps> = ({
   // Only consider selected IDs that are actually present in the provided cards
   const validSelectedIds = selectedCardIds.filter((id) => cards.some((c) => c.id === id));
 
+  const isSmallScreen = typeof window !== 'undefined' && window.innerHeight <= 520;
   const total = sortedCards.length;
-  const maxSpreadWidth = Math.min(1080, window.innerWidth - 60);
-  const cardWidth = 78;
+  const maxSpreadWidth = Math.min(1080, (typeof window !== 'undefined' ? window.innerWidth : 800) - 40);
+  const cardWidth = isSmallScreen ? 56 : 78;
   const availableSpace = maxSpreadWidth - cardWidth;
-  const overlapSpacing = total > 1 ? Math.min(64, Math.max(38, availableSpace / (total - 1))) : 0;
+  const overlapSpacing =
+    total > 1
+      ? Math.min(isSmallScreen ? 44 : 64, Math.max(isSmallScreen ? 24 : 38, availableSpace / (total - 1)))
+      : 0;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', gap: 6 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', gap: 4 }}>
       {/* Hand Controls: Sort and View mode toggles */}
       <div
+        className="card-fan-controls"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -179,7 +184,7 @@ export const CardFan: React.FC<CardFanProps> = ({
                       onCardClick(card.id);
                     }
                   }}
-                  size="md"
+                  size={isSmallScreen ? 'sm' : 'md'}
                 />
               </div>
             );
@@ -242,7 +247,7 @@ export const CardFan: React.FC<CardFanProps> = ({
                       onCardClick(card.id);
                     }
                   }}
-                  size="md"
+                  size={isSmallScreen ? 'sm' : 'md'}
                 />
               </div>
             );

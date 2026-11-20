@@ -555,6 +555,7 @@ export const BluffPage: React.FC = () => {
 
       {/* Top Bar / Controls */}
       <div
+        className="game-secondary-header"
         style={{
           width: '100%',
           display: 'flex',

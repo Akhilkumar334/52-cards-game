@@ -479,7 +479,83 @@ button:disabled {
 }
 
 /* Mobile landscape adjustments (screen height <= 520px) */
-@media (max-height: 520px), (max-width: 768px) {
+@media (max-height: 520px) {
+  /* 1. Hide in-game duplicate secondary header */
+  .game-secondary-header {
+    display: none !important;
+  }
+
+  /* 2. Compact table felt: takes ~135px so cards have plenty of room below */
+  .felt-arena-responsive {
+    height: 135px !important;
+    border-radius: 68px !important;
+    padding: 2px 14px !important;
+    border-width: 4px !important;
+  }
+
+  /* 3. Scale seat avatars inside felt table */
+  .player-seat-avatar {
+    width: 34px !important;
+    height: 34px !important;
+  }
+  .player-seat-avatar span.avatar-emoji {
+    font-size: 0.95rem !important;
+  }
+  .player-seat-name {
+    font-size: 0.65rem !important;
+    max-width: 60px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* 4. Center card pile inside felt */
+  .table-center-pile {
+    transform: scale(0.72) !important;
+    transform-origin: center center !important;
+  }
+
+  /* 5. Compact action controls bar */
+  .game-action-bar-compact {
+    padding: 3px 10px !important;
+    gap: 4px !important;
+    margin-top: 2px !important;
+    background: rgba(0, 0, 0, 0.6) !important;
+    border-width: 1px !important;
+    box-shadow: none !important;
+  }
+  .game-action-bar-compact .instruction-text {
+    display: none !important;
+  }
+  .game-action-bar-compact button {
+    padding: 4px 10px !important;
+    font-size: 0.78rem !important;
+    border-radius: 12px !important;
+  }
+
+  /* 6. Card Fan fits on screen and cards are 100% visible */
+  .card-fan-controls {
+    display: none !important;
+  }
+  .card-fan-responsive {
+    height: 75px !important;
+    padding: 0 4px !important;
+  }
+
+  /* 7. Bottom console has zero wasted wrapper space */
+  .bottom-console-wrapper {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+  .bottom-console-header {
+    display: none !important;
+  }
+}
+
+/* Portrait mobile adjustments */
+@media (max-width: 768px) and (min-height: 521px) {
   .felt-arena-responsive {
     height: 220px !important;
     border-radius: 110px !important;
